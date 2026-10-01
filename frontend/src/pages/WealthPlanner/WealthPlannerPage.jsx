@@ -6,6 +6,7 @@ import {
   ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts';
 import { getChartColors } from '../../utils/chartColors';
+import { loadLocalPlan, saveLocalPlan, localProjection, localScenarios } from '../../utils/localWealthPlan';
 
 // Parameter field definitions (direct-type entry)
 const FIELDS = [
@@ -28,27 +29,40 @@ export default function WealthPlannerPage() {
   const [form, setForm] = useState(null);
   const [locked, setLocked] = useState(true);
   const [saving, setSaving] = useState(false);
+  // Offline mode: the server can't be reached, so the plan lives in this
+  // browser and projections are computed locally (see utils/localWealthPlan).
+  const [offline, setOffline] = useState(false);
+  const [localPlan, setLocalPlan] = useState(null);
 
   useEffect(() => {
-    if (plan && !form) setForm({ ...plan });
+    if (plan && (!form || offline)) {
+      setForm({ ...plan });
+      setOffline(false);
+      setLocked(true);
+    }
   }, [plan]);
 
-  if (!form && planError) {
-    return (
-      <div className="p-gutter">
-        <div className="alert-error">
-          <p className="font-semibold">Error loading wealth plan</p>
-          <p className="text-sm mt-1">{planError}</p>
-          <button onClick={refetchPlan} className="btn-outline text-sm mt-3">Retry</button>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (planError && !plan && !form) {
+      const saved = loadLocalPlan();
+      setLocalPlan(saved);
+      setForm({ ...saved });
+      setOffline(true);
+    }
+  }, [planError]);
+
+  const retryConnection = () => {
+    refetchPlan();
+    refetchProj();
+    refetchScenarios();
+  };
+
   if (!form) {
     return <div className="flex items-center justify-center h-96 text-on-surface-variant">Loading wealth plan...</div>;
   }
 
-  const rows = projData?.rows || [];
+  const rows = (offline ? localProjection(localPlan) : projData)?.rows || [];
+  const scenarioData = offline ? localScenarios(localPlan) : scenarios;
   const finalRow = rows[rows.length - 1];
   const withdrawalRows = rows.filter((r) => r.phase === 'withdrawal');
   const firstWithdrawal = withdrawalRows[0];
@@ -60,6 +74,11 @@ export default function WealthPlannerPage() {
     try {
       const payload = {};
       FIELDS.forEach((f) => { payload[f.key] = Number(form[f.key]); });
+      if (offline) {
+        setLocalPlan(saveLocalPlan(payload));
+        setLocked(true);
+        return;
+      }
       await apiPut('/wealth-plan', payload);
       setLocked(true);
       refetchProj();
@@ -72,7 +91,7 @@ export default function WealthPlannerPage() {
   };
 
   const scenarioStats = (key) => {
-    const s = scenarios?.[key];
+    const s = scenarioData?.[key];
     if (!s || !s.length) return { peak: 0, depletesYear: null };
     const peak = Math.max(...s.map((r) => r.nominalCorpus));
     const depleted = s.find((r) => r.phase === 'withdrawal' && r.nominalCorpus <= 0);
@@ -81,6 +100,21 @@ export default function WealthPlannerPage() {
 
   return (
     <div className="p-4 md:p-8 space-y-gutter">
+      {offline && (
+        <div className="alert-warning flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <p className="font-semibold flex items-center gap-2">
+              <span className="material-symbols-outlined text-[18px]">cloud_off</span>
+              Offline mode — server not reachable
+            </p>
+            <p className="text-body-sm mt-1">
+              Projections are calculated in your browser and saved on this device only.
+              Actual/live capital needs the server.
+            </p>
+          </div>
+          <button onClick={retryConnection} className="btn-outline text-sm whitespace-nowrap">Retry connection</button>
+        </div>
+      )}
       <div className="grid grid-cols-12 gap-gutter">
         {/* Left: Parameter inputs */}
         <div className="col-span-12 lg:col-span-4 space-y-gutter min-w-0">
