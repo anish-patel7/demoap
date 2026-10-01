@@ -22,15 +22,24 @@ export default function MonthlyTrackerPage() {
   const handleAdd = async ({ account_id, monthIdx, amount, type }) => {
     const mm = String(monthIdx + 1).padStart(2, '0');
     const txn_date = `${year}-${mm}-15`;
-    await apiPost('/fund-transactions', { account_id, type, amount: Number(amount), txn_date, notes: 'Investment tracker' });
-    setCell(null);
-    refetch();
+    try {
+      await apiPost('/fund-transactions', { account_id, type, amount: Number(amount), txn_date, notes: 'Investment tracker' });
+      setCell(null);
+      refetch();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
   };
 
   const handleSaveSip = async (val) => {
-    await apiPut('/wealth-plan', { monthly_sip: Number(val) });
-    setEditingSip(false);
-    refetchPlan();
+    try {
+      await apiPut('/wealth-plan', { monthly_sip: Number(val) });
+      setEditingSip(false);
+      refetchPlan();
+    } catch (err) {
+      setEditingSip(false);
+      alert('Error saving SIP: ' + err.message);
+    }
   };
 
   return (

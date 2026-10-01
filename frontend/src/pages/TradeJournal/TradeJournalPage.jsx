@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useFetch } from '../../hooks/useFetch';
 import { useAccount } from '../../context/AccountContext';
-import { apiPost, apiPut, apiPatch, apiDelete } from '../../api/client';
+import { apiPost, apiPut, apiPatch, apiDelete, API_BASE, handleResponse } from '../../api/client';
 import TradeForm from './TradeForm';
 import TradeTable from './TradeTable';
 import CsvImportModal from './CsvImportModal';
@@ -78,8 +78,8 @@ export default function TradeJournalPage() {
   const handleImportCsv = async (csvContent) => {
     try {
       const blob = new Blob([csvContent], { type: 'text/csv' });
-      const response = await fetch('/api/trades/import-csv', { method: 'POST', body: blob });
-      const result = await response.json();
+      const response = await fetch(`${API_BASE}/trades/import-csv`, { method: 'POST', body: blob });
+      const result = await handleResponse(response);
       alert(`Imported ${result.imported} trades, skipped ${result.skipped}`);
       refetch();
       setShowImportModal(false);

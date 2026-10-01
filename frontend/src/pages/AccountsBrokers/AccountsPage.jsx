@@ -43,9 +43,13 @@ export default function AccountsPage() {
 
   const handleDeleteTxn = async (id) => {
     if (!confirm('Delete this ledger entry? Account capital will be adjusted.')) return;
-    await apiDelete(`/fund-transactions/${id}`);
-    refetch();
-    refetchLedger();
+    try {
+      await apiDelete(`/fund-transactions/${id}`);
+      refetch();
+      refetchLedger();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
   };
 
   const handleDeleteAccount = async (id) => {

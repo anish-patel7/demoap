@@ -1,6 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { readJson } from '../api/client';
 
-const API_BASE = '/api';
+// Defaults to '/api' (proxied to the backend by Vite in dev). Set VITE_API_BASE_URL
+// (e.g. https://my-backend.example.com/api) when the backend is hosted elsewhere.
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 export function useFetch(url, dependencies = []) {
   const [data, setData] = useState(null);
@@ -27,7 +30,7 @@ export function useFetch(url, dependencies = []) {
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-      const json = await response.json();
+      const json = await readJson(response);
       if (requestId === requestIdRef.current) setData(json);
     } catch (err) {
       if (requestId === requestIdRef.current) setError(err.message);
