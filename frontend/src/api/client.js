@@ -2,12 +2,25 @@
 // (e.g. https://my-backend.example.com/api) when the backend is hosted elsewhere.
 export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
-async function handleResponse(response) {
+// Shown when the API answers with something other than JSON (e.g. the
+// frontend host's HTML page because no backend is reachable).
+export const SERVER_UNAVAILABLE_MSG = 'Unable to reach the WealthTrack server. Please try again later.';
+
+// Parse a JSON body, turning a non-JSON reply into a readable error.
+export async function readJson(response) {
+  try {
+    return await response.json();
+  } catch {
+    throw new Error(SERVER_UNAVAILABLE_MSG);
+  }
+}
+
+export async function handleResponse(response) {
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
     throw new Error(error.error || `HTTP ${response.status}`);
   }
-  return response.json();
+  return readJson(response);
 }
 
 export async function apiGet(path) {
@@ -61,6 +74,10 @@ export async function apiUpload(path, formData) {
 export async function downloadBackup() {
   const response = await fetch(`${API_BASE}/backup/download`);
   if (!response.ok) throw new Error(`Backup failed (HTTP ${response.status})`);
+  // An HTML reply means the backend wasn't reached; don't save it as a backup.
+  if ((response.headers.get('Content-Type') || '').includes('text/html')) {
+    throw new Error(`Backup failed: ${SERVER_UNAVAILABLE_MSG}`);
+  }
   const blob = await response.blob();
   const disposition = response.headers.get('Content-Disposition') || '';
   const match = disposition.match(/filename="?([^"]+)"?/);
