@@ -23,7 +23,7 @@ export default function WealthPlannerPage() {
   const colors = getChartColors();
   const { data: plan, error: planError, refetch: refetchPlan } = useFetch('/wealth-plan', []);
   const { data: projData, refetch: refetchProj } = useFetch('/wealth-plan/projection-actual', []);
-  const { data: scenarios } = useFetch('/wealth-plan/scenarios/all', []);
+  const { data: scenarios, refetch: refetchScenarios } = useFetch('/wealth-plan/scenarios/all', []);
 
   const [form, setForm] = useState(null);
   const [locked, setLocked] = useState(true);
@@ -63,6 +63,7 @@ export default function WealthPlannerPage() {
       await apiPut('/wealth-plan', payload);
       setLocked(true);
       refetchProj();
+      refetchScenarios(); // scenario cards are derived from the saved plan too
     } catch (err) {
       alert('Error saving: ' + err.message);
     } finally {
