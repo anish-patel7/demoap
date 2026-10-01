@@ -89,9 +89,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
         >
           <select
             name="account_id"
-            value={formData.account_id}
+            value={formData.account_id ?? ''}
             onChange={handleChange}
-            className={`form-select ${errors.account_id ? 'border-secondary' : ''}`}
+            className={`form-select w-full ${errors.account_id ? 'border-secondary' : ''}`}
           >
             <option value="">Select account</option>
             {accounts?.map((a) => (
@@ -111,10 +111,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
           <input
             type="text"
             name="ticker"
-            value={formData.ticker}
+            value={formData.ticker ?? ''}
             onChange={handleChange}
             placeholder="e.g., GOLDGUINEA"
-            className={`form-input uppercase ${errors.ticker ? 'border-secondary' : ''}`}
+            className={`form-input w-full uppercase ${errors.ticker ? 'border-secondary' : ''}`}
           />
         </FormField>
 
@@ -122,9 +122,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
         <FormField label="Instrument Type">
           <select
             name="instrument_type"
-            value={formData.instrument_type}
+            value={formData.instrument_type ?? ''}
             onChange={handleChange}
-            className="form-select"
+            className="form-select w-full"
           >
             <option>Commodity</option>
             <option>Equity</option>
@@ -138,9 +138,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
         <FormField label="Setup">
           <select
             name="trade_setup"
-            value={formData.trade_setup}
+            value={formData.trade_setup ?? ''}
             onChange={handleChange}
-            className="form-select"
+            className="form-select w-full"
           >
             <option value="">None</option>
             {setups?.map((s) => (
@@ -155,9 +155,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
         <FormField label="Direction" required>
           <select
             name="direction"
-            value={formData.direction}
+            value={formData.direction ?? ''}
             onChange={handleChange}
-            className="form-select"
+            className="form-select w-full"
           >
             <option value="Buy">Buy (Long)</option>
             <option value="Sell">Sell (Short)</option>
@@ -169,9 +169,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
           <input
             type="date"
             name="entry_date"
-            value={formData.entry_date}
+            value={formData.entry_date ?? ''}
             onChange={handleChange}
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -181,10 +181,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="quantity"
-            value={formData.quantity}
+            value={formData.quantity ?? ''}
             onChange={handleChange}
             placeholder="1"
-            className={`form-input ${errors.quantity ? 'border-secondary' : ''}`}
+            className={`form-input w-full ${errors.quantity ? 'border-secondary' : ''}`}
           />
         </FormField>
 
@@ -194,10 +194,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="entry_price"
-            value={formData.entry_price}
+            value={formData.entry_price ?? ''}
             onChange={handleChange}
             placeholder="0.00"
-            className={`form-input ${errors.entry_price ? 'border-secondary' : ''}`}
+            className={`form-input w-full ${errors.entry_price ? 'border-secondary' : ''}`}
           />
         </FormField>
 
@@ -207,10 +207,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="target_price"
-            value={formData.target_price}
+            value={formData.target_price ?? ''}
             onChange={handleChange}
             placeholder="0.00"
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -220,10 +220,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="stoploss"
-            value={formData.stoploss}
+            value={formData.stoploss ?? ''}
             onChange={handleChange}
             placeholder="0.00"
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -233,10 +233,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="margin_pct"
-            value={formData.margin_pct}
+            value={formData.margin_pct ?? ''}
             onChange={handleChange}
             placeholder="100"
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -245,9 +245,9 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
           <input
             type="date"
             name="exit_date"
-            value={formData.exit_date}
+            value={formData.exit_date ?? ''}
             onChange={handleChange}
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -257,10 +257,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="exit_price"
-            value={formData.exit_price}
+            value={formData.exit_price ?? ''}
             onChange={handleChange}
             placeholder="0.00"
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
 
@@ -270,10 +270,10 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
             type="number"
             step="0.01"
             name="ltp"
-            value={formData.ltp}
+            value={formData.ltp ?? ''}
             onChange={handleChange}
             placeholder="0.00"
-            className="form-input"
+            className="form-input w-full"
           />
         </FormField>
       </div>
@@ -282,16 +282,16 @@ export default function TradeForm({ initialData, onSubmit, onCancel, setups = []
       <FormField label="Remarks">
         <textarea
           name="remarks"
-          value={formData.remarks}
+          value={formData.remarks ?? ''}
           onChange={handleChange}
           placeholder="Add any notes about this trade..."
           rows="3"
-          className="form-input"
+          className="form-input w-full"
         />
       </FormField>
 
       {/* Form Actions */}
-      <div className="flex gap-3 justify-end pt-4 border-t border-outline-variant">
+      <div className="flex flex-wrap gap-3 justify-end pt-4 border-t border-outline-variant">
         <button
           type="button"
           onClick={onCancel}

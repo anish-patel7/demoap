@@ -15,10 +15,10 @@ export default function CsvImportModal({ onImport, onCancel }) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-surface-container rounded-xl max-w-2xl w-full border border-outline-variant overflow-hidden">
+      <div className="bg-surface-container rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar border border-outline-variant">
         {/* Header */}
-        <div className="bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
-          <h2 className="text-headline-lg text-on-surface">Import Trades from CSV</h2>
+        <div className="sticky top-0 bg-surface-container-high border-b border-outline-variant px-4 sm:px-6 py-4 flex justify-between items-center gap-3">
+          <h2 className="text-headline-md sm:text-headline-lg text-on-surface">Import Trades from CSV</h2>
           <button
             onClick={onCancel}
             className="text-on-surface-variant hover:text-on-surface text-2xl transition-colors"
@@ -28,7 +28,7 @@ export default function CsvImportModal({ onImport, onCancel }) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
           {/* Instructions */}
           <div>
             <p className="text-body-sm text-on-surface-variant mb-3">
@@ -50,7 +50,7 @@ export default function CsvImportModal({ onImport, onCancel }) {
               }}
               rows={10}
               placeholder="account_id,ticker,direction,entry_date,entry_time,quantity,entry_price,..."
-              className="form-input font-mono text-body-sm"
+              className="form-input w-full font-mono text-body-sm"
             />
             {error && (
               <p className="text-secondary text-body-sm mt-2">{error}</p>

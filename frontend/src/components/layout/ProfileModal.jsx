@@ -43,7 +43,7 @@ export default function ProfileModal({ open, onClose }) {
       onMouseDown={onClose}
     >
       <div
-        className="w-full max-w-md bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl p-6"
+        className="w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl p-6"
         onMouseDown={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-5">

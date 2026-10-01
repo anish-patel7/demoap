@@ -70,14 +70,14 @@ export default function AccountsPage() {
   const children = list.filter((a) => !a.is_master_account);
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-end">
+      <div className="flex flex-wrap justify-between items-end gap-4">
         <div>
           <h2 className="font-headline-lg text-headline-lg text-on-surface mb-1">Accounts &amp; Brokers</h2>
           <p className="text-on-surface-variant text-body-md">Manage institutional connections and capital allocation across entities.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <HeaderBtn icon="sync" label="Refresh Feeds" />
           <HeaderBtn icon="currency_exchange" label="Transfer Funds" />
           <HeaderBtn icon="key" label="Update Password Date" />
@@ -85,10 +85,10 @@ export default function AccountsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="bg-surface-container-low p-4 rounded border border-outline-variant border-l-4 border-l-primary">
           <p className="text-on-surface-variant font-mono-label text-[10px] uppercase tracking-wider mb-1">Total Trading Capital</p>
-          <p className="text-headline-md font-headline-md text-primary">{formatINR(totalCapital)}</p>
+          <p className="text-headline-md font-headline-md text-primary break-words">{formatINR(totalCapital)}</p>
           <p className="text-[11px] text-primary/70 mt-1 flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]">trending_up</span> +2.4% vs last month
           </p>
@@ -100,7 +100,7 @@ export default function AccountsPage() {
 
       {/* Account Grid */}
       <section>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">grid_view</span>
             Primary Managed Accounts
@@ -255,12 +255,12 @@ function DematLedger({ ledger, accounts, brokerFilter, onBrokerFilter, onEdit, o
   return (
     <section className="bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden">
       <div className="p-4 border-b border-outline-variant flex flex-wrap justify-between items-center gap-3 bg-surface-container">
-        <h3 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
+        <h3 className="font-headline-md text-headline-md text-on-surface flex flex-wrap items-center gap-2">
           <span className="material-symbols-outlined text-primary">receipt_long</span>
           Demat Ledger
           <span className="text-body-sm font-normal text-on-surface-variant">deposits &amp; withdrawals, broker-wise</span>
         </h3>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 text-body-sm">
             <span className="text-primary font-mono-label">▲ {formatINRCompact(totalDeposits)}</span>
             <span className="text-secondary font-mono-label">▼ {formatINRCompact(totalWithdrawals)}</span>
@@ -347,7 +347,7 @@ function FundModal({ account, transaction, accounts, onSave, onCancel }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-surface-container rounded-xl max-w-md w-full border border-outline-variant">
+      <div className="bg-surface-container rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto custom-scrollbar border border-outline-variant">
         <div className="bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
           <h2 className="text-headline-md font-bold text-on-surface">
             {transaction ? 'Edit Fund Transaction' : 'Fund Transaction'}
@@ -426,19 +426,19 @@ function AccountCard({ account, daysUntil, onEdit, onDelete, onFund }) {
           <span className="material-symbols-outlined text-primary fill-icon">star</span>
         </div>
       )}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-surface-variant rounded flex items-center justify-center text-primary font-bold">
+      <div className={`flex items-center gap-3 mb-4 ${isMaster ? 'pr-8' : ''}`}>
+        <div className="w-10 h-10 flex-shrink-0 bg-surface-variant rounded flex items-center justify-center text-primary font-bold">
           {account.broker_name?.[0]?.toUpperCase() || 'B'}
         </div>
-        <div>
-          <h4 className="text-body-md font-bold text-on-surface">{account.account_name}</h4>
-          <p className="text-[11px] font-mono-label text-on-surface-variant uppercase">BROKER: {account.broker_name}</p>
+        <div className="min-w-0">
+          <h4 className="text-body-md font-bold text-on-surface truncate" title={account.account_name}>{account.account_name}</h4>
+          <p className="text-[11px] font-mono-label text-on-surface-variant uppercase truncate">BROKER: {account.broker_name}</p>
         </div>
       </div>
       <div className="space-y-3">
         <div>
           <p className="text-[10px] text-on-surface-variant uppercase font-mono-label">Current Capital</p>
-          <p className="text-headline-md font-mono-label text-primary">{formatINR(capital)}</p>
+          <p className="text-headline-md font-mono-label text-primary break-words">{formatINR(capital)}</p>
         </div>
         <div className="flex justify-between items-end border-t border-outline-variant pt-3">
           <div>
@@ -492,28 +492,28 @@ function AccountFormModal({ account, onSave, onCancel }) {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-surface-container rounded-xl max-w-lg w-full border border-outline-variant max-h-[85vh] overflow-y-auto custom-scrollbar">
-        <div className="sticky top-0 bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
+        <div className="sticky top-0 z-10 bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
           <h2 className="text-headline-lg font-bold text-on-surface">{account ? 'Edit Account' : 'New Account'}</h2>
           <button onClick={onCancel} className="text-on-surface-variant hover:text-on-surface">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <Field label="Account Name" required><input name="account_name" value={formData.account_name} onChange={handleChange} className="form-input w-full" required /></Field>
-          <Field label="Broker Name" required><input name="broker_name" value={formData.broker_name} onChange={handleChange} className="form-input w-full" required /></Field>
+          <Field label="Account Name" required><input name="account_name" value={formData.account_name ?? ''} onChange={handleChange} className="form-input w-full" required /></Field>
+          <Field label="Broker Name" required><input name="broker_name" value={formData.broker_name ?? ''} onChange={handleChange} className="form-input w-full" required /></Field>
           <Field label="Account Type">
-            <select name="account_type" value={formData.account_type} onChange={handleChange} className="form-select w-full">
+            <select name="account_type" value={formData.account_type ?? ''} onChange={handleChange} className="form-select w-full">
               <option>Trading</option><option>Demat</option><option>Investment</option>
             </select>
           </Field>
-          <Field label="Purpose"><input name="purpose" value={formData.purpose} onChange={handleChange} className="form-input w-full" /></Field>
+          <Field label="Purpose"><input name="purpose" value={formData.purpose ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Starting Capital"><input type="number" name="starting_capital" value={formData.starting_capital} onChange={handleChange} className="form-input w-full" /></Field>
-            <Field label="Current Capital"><input type="number" name="current_capital" value={formData.current_capital} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Starting Capital"><input type="number" name="starting_capital" value={formData.starting_capital ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Current Capital"><input type="number" name="current_capital" value={formData.current_capital ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <Field label="Risk Limit %"><input type="number" name="risk_limit_pct" value={formData.risk_limit_pct} onChange={handleChange} className="form-input w-full" /></Field>
-            <Field label="Algo Platform"><input name="algo_platform" value={formData.algo_platform} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Risk Limit %"><input type="number" name="risk_limit_pct" value={formData.risk_limit_pct ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Algo Platform"><input name="algo_platform" value={formData.algo_platform ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
           </div>
           <div className="flex gap-6">
             <label className="flex items-center gap-2 text-body-sm text-on-surface">

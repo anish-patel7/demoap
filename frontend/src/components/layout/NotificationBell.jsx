@@ -53,7 +53,7 @@ export default function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-80 max-h-[70vh] overflow-y-auto bg-surface-container-high border border-outline-variant rounded-lg shadow-xl z-50">
+        <div className="fixed inset-x-3 top-14 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-80 max-h-[70vh] overflow-y-auto bg-surface-container-high border border-outline-variant rounded-lg shadow-xl z-50">
           <div className="px-4 py-3 border-b border-outline-variant flex items-center justify-between">
             <span className="font-bold text-on-surface">Notifications</span>
             {count > 0 && (

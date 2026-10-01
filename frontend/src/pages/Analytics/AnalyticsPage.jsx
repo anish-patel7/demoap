@@ -11,8 +11,18 @@ export default function AnalyticsPage() {
   const colors = getChartColors();
   const [accountId, setAccountId] = useState('all');
   const { data: accounts } = useFetch('/accounts', []);
-  const { data: d, loading } = useFetch(`/dashboard?account_id=${accountId}`, [accountId]);
+  const { data: d, loading, error } = useFetch(`/dashboard?account_id=${accountId}`, [accountId]);
 
+  if (error) {
+    return (
+      <div className="p-gutter">
+        <div className="alert-error">
+          <p className="font-semibold">Error loading analytics</p>
+          <p className="text-sm mt-1">{error}</p>
+        </div>
+      </div>
+    );
+  }
   if (loading || !d) {
     return <div className="flex items-center justify-center h-96 text-on-surface-variant">Loading analytics…</div>;
   }
@@ -45,7 +55,7 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-display text-on-surface">Trade Analytics</h1>
+          <h1 className="text-headline-lg sm:text-display text-on-surface">Trade Analytics</h1>
           <p className="text-body-sm text-on-surface-variant mt-1">Performance breakdown by setup, instrument and outcome</p>
         </div>
         <select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="form-select">
@@ -55,11 +65,11 @@ export default function AnalyticsPage() {
       </div>
 
       {/* KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
         {kpis.map((k) => (
-          <div key={k.label} className="bento-card p-3 rounded-lg">
-            <div className="font-mono-label text-[10px] text-on-surface-variant uppercase">{k.label}</div>
-            <div className={`font-headline-md text-headline-md mt-1 ${k.color || 'text-on-surface'}`}>{k.value}</div>
+          <div key={k.label} className="bento-card p-3 rounded-lg min-w-0">
+            <div className="font-mono-label text-[10px] text-on-surface-variant uppercase truncate">{k.label}</div>
+            <div className={`font-headline-md text-headline-md mt-1 truncate ${k.color || 'text-on-surface'}`} title={String(k.value)}>{k.value}</div>
           </div>
         ))}
       </div>
@@ -167,7 +177,7 @@ export default function AnalyticsPage() {
 
 function ChartCard({ title, children }) {
   return (
-    <div className="card">
+    <div className="card min-w-0">
       <div className="card-header"><h3 className="text-headline-md text-on-surface">{title}</h3></div>
       {children}
     </div>

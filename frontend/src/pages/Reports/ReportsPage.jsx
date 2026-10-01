@@ -56,7 +56,10 @@ export default function ReportsPage() {
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
+    // Attach before clicking so the download also fires in Firefox.
+    document.body.appendChild(a);
     a.click();
+    a.remove();
     URL.revokeObjectURL(url);
   };
 
@@ -82,10 +85,10 @@ export default function ReportsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-display text-on-surface">Reports</h1>
+          <h1 className="text-headline-lg sm:text-display text-on-surface">Reports</h1>
           <p className="text-body-sm text-on-surface-variant mt-1">Period summaries and exports</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <select value={accountId} onChange={(e) => setAccountId(e.target.value)} className="form-select">
             <option value="all">All Accounts</option>
             {accounts?.map((a) => <option key={a.id} value={a.id}>{a.account_name}</option>)}
@@ -102,7 +105,7 @@ export default function ReportsPage() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
         <Stat label="Total Trades" value={rows.length} />
         <Stat label="Closed" value={closed.length} />
         <Stat label="Wins" value={wins} color="text-primary" />
@@ -163,16 +166,16 @@ export default function ReportsPage() {
 
 function Stat({ label, value, color = 'text-on-surface' }) {
   return (
-    <div className="bento-card p-3 rounded-lg">
-      <div className="font-mono-label text-[10px] text-on-surface-variant uppercase">{label}</div>
-      <div className={`font-headline-md text-headline-md mt-1 ${color}`}>{value}</div>
+    <div className="bento-card p-3 rounded-lg min-w-0">
+      <div className="font-mono-label text-[10px] text-on-surface-variant uppercase truncate">{label}</div>
+      <div className={`font-headline-md text-headline-md mt-1 truncate ${color}`} title={String(value)}>{value}</div>
     </div>
   );
 }
 
 function SummaryTable({ title, rows }) {
   return (
-    <div className="card">
+    <div className="card min-w-0">
       <div className="card-header"><h3 className="text-headline-md text-on-surface">{title}</h3></div>
       <div className="overflow-x-auto">
         <table className="data-table">

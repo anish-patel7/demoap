@@ -157,7 +157,7 @@ html, body {
   }
 
   .card-header {
-    @apply flex items-center justify-between mb-4 pb-3 border-b border-outline-variant;
+    @apply flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-outline-variant;
   }
 
   /* Bento card - dashboard widget style from Stitch design */

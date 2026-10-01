@@ -53,12 +53,12 @@ export default function DashboardPage() {
       <GoalProgressCard />
 
       {/* 1. Summary Grid (High Density) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 mb-6">
         {summary.map((c) => (
-          <div key={c.label} className="bento-card p-3 rounded-lg flex flex-col justify-between min-h-[72px]">
-            <span className="font-mono-label text-[10px] text-on-surface-variant uppercase">{c.label}</span>
+          <div key={c.label} className="bento-card p-3 rounded-lg flex flex-col justify-between min-h-[72px] min-w-0">
+            <span className="font-mono-label text-[10px] text-on-surface-variant uppercase truncate">{c.label}</span>
             <div className="flex flex-col">
-              <span className={`font-headline-md text-headline-md ${c.color || 'text-on-surface'}`}>{c.value}</span>
+              <span className={`font-headline-md text-headline-md truncate ${c.color || 'text-on-surface'}`} title={c.value}>{c.value}</span>
               {c.sub && <span className={`text-[11px] font-mono-label ${c.color || 'text-on-surface-variant'}`}>{c.sub}</span>}
             </div>
           </div>
@@ -68,13 +68,13 @@ export default function DashboardPage() {
       {/* Main Grid */}
       <div className="grid grid-cols-12 gap-gutter">
         {/* Left: charts */}
-        <div className="col-span-12 lg:col-span-8 flex flex-col gap-gutter">
+        <div className="col-span-12 lg:col-span-8 flex flex-col gap-gutter min-w-0">
           <EquityCurveChart data={d.equityCurve} />
           <MonthlyPnlChart data={d.monthlyPnl} />
         </div>
 
         {/* Right: Risk Radar + Recent Trades */}
-        <div className="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+        <div className="col-span-12 lg:col-span-4 flex flex-col gap-gutter min-w-0">
           <RiskRadar dashboard={d} />
           <RecentTrades trades={d.recentTrades || d.openPositions} />
         </div>
@@ -87,7 +87,7 @@ export default function DashboardPage() {
           <span className="h-4 w-px bg-outline-variant" />
           <p className="text-body-sm text-on-surface-variant">v4.2.0-stable</p>
         </div>
-        <div className="flex gap-6">
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
           <a className="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
           <a className="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
           <a className="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
@@ -115,7 +115,7 @@ function RiskRadar({ dashboard }) {
       <div className="space-y-4">
         {/* Daily loss limit */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center gap-2">
             <span className="text-body-sm text-on-surface-variant">Daily Loss Limit</span>
             <span className="text-body-sm font-mono-label text-on-surface">{formatINR(dailyLimit)}</span>
           </div>
@@ -130,8 +130,8 @@ function RiskRadar({ dashboard }) {
 
         {/* Missing stoplosses alert */}
         {dashboard.riskLimitExceeded !== undefined && (
-          <div className="flex items-center justify-between p-3 bg-secondary-container/10 border border-secondary/20 rounded-lg">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-2 p-3 bg-secondary-container/10 border border-secondary/20 rounded-lg">
+            <div className="flex items-center gap-3 min-w-0">
               <span className="material-symbols-outlined text-secondary">gpp_maybe</span>
               <div>
                 <p className="text-body-sm text-on-surface font-bold">Missing Stoplosses</p>
@@ -146,8 +146,8 @@ function RiskRadar({ dashboard }) {
 
         {/* Password expiry */}
         {dashboard.passwordExpiryWarnings?.length > 0 && (
-          <div className="flex items-center justify-between p-3 bg-surface-container rounded-lg">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-2 p-3 bg-surface-container rounded-lg">
+            <div className="flex items-center gap-3 min-w-0">
               <span className="material-symbols-outlined text-tertiary">key</span>
               <div>
                 <p className="text-body-sm text-on-surface font-bold">Password Expiry</p>

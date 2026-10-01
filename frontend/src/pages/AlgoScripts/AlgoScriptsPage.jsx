@@ -34,9 +34,9 @@ export default function AlgoScriptsPage() {
   const isPositive = totalPnl >= 0;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 md:p-6 space-y-6">
       {/* Stats header */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter">
         <div className="bg-surface-container-low p-4 border border-outline-variant rounded-lg">
           <p className="text-on-surface-variant font-mono-label text-mono-label uppercase mb-1">Total Strategies</p>
           <div className="flex items-end gap-2">
@@ -50,7 +50,7 @@ export default function AlgoScriptsPage() {
             <span className="text-on-surface-variant text-body-sm mb-2">/ {String(list.length - active.length).padStart(2, '0')} paused</span>
           </div>
         </div>
-        <div className="bg-surface-container-low p-4 border border-outline-variant rounded-lg">
+        <div className="bg-surface-container-low p-4 border border-outline-variant rounded-lg min-w-0">
           <p className="text-on-surface-variant font-mono-label text-mono-label uppercase mb-1">Best Performer</p>
           <div className="flex flex-col">
             <span className="font-headline-md text-headline-md text-primary truncate">{best?.script_name || '—'}</span>
@@ -72,7 +72,7 @@ export default function AlgoScriptsPage() {
 
       {/* Inventory */}
       <div>
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
           <h2 className="text-headline-md font-headline-md text-on-surface">Script Inventory</h2>
           <button
             onClick={() => { setEditingScript(null); setShowForm(true); }}
@@ -117,9 +117,9 @@ function ScriptCard({ script, onEdit, onDelete }) {
 
   return (
     <div className={`bg-surface-container-low rounded-lg p-4 transition-all group cursor-pointer ${isActive ? 'border border-primary/30 hover:border-primary ring-1 ring-primary/5' : 'border border-outline-variant hover:border-on-surface-variant'}`}>
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors">{script.script_name}</h3>
+      <div className="flex justify-between items-start gap-2 mb-4">
+        <div className="min-w-0">
+          <h3 className="text-body-lg font-bold text-on-surface group-hover:text-primary transition-colors break-words">{script.script_name}</h3>
           <div className="flex items-center gap-2 mt-1">
             <span className={`text-[10px] font-mono-label px-1.5 py-0.5 rounded uppercase tracking-wider ${isActive ? 'bg-primary/20 text-primary' : 'bg-surface-variant text-on-surface-variant'}`}>
               {isActive ? 'Active' : 'Paused'}
@@ -191,7 +191,7 @@ function ScriptFormModal({ script, onSave, onCancel }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-surface-container rounded-xl max-w-md w-full border border-outline-variant">
+      <div className="bg-surface-container rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto custom-scrollbar border border-outline-variant">
         <div className="bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
           <h2 className="text-headline-lg font-bold text-on-surface">{script ? 'Edit Script' : 'New Script'}</h2>
           <button onClick={onCancel} className="text-on-surface-variant hover:text-on-surface">
@@ -199,10 +199,10 @@ function ScriptFormModal({ script, onSave, onCancel }) {
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          <Field label="Script Name" required><input name="script_name" value={formData.script_name} onChange={handleChange} className="form-input w-full" required /></Field>
+          <Field label="Script Name" required><input name="script_name" value={formData.script_name ?? ''} onChange={handleChange} className="form-input w-full" required /></Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Direction">
-              <select name="trade_direction" value={formData.trade_direction} onChange={handleChange} className="form-select w-full">
+              <select name="trade_direction" value={formData.trade_direction ?? ''} onChange={handleChange} className="form-select w-full">
                 <option value="LONG">Long</option><option value="SHORT">Short</option><option value="BOTH">Both</option>
               </select>
             </Field>
@@ -212,7 +212,7 @@ function ScriptFormModal({ script, onSave, onCancel }) {
                   <input
                     type="text"
                     name="timeframe"
-                    value={formData.timeframe === 'Other' ? '' : formData.timeframe}
+                    value={formData.timeframe === 'Other' ? '' : formData.timeframe ?? ''}
                     onChange={handleChange}
                     placeholder="e.g. 2H, 30M"
                     className="form-input w-full"
@@ -234,7 +234,7 @@ function ScriptFormModal({ script, onSave, onCancel }) {
               ) : (
                 <select
                   name="timeframe"
-                  value={formData.timeframe}
+                  value={formData.timeframe ?? ''}
                   onChange={(e) => {
                     if (e.target.value === 'Other') {
                       setShowCustomTimeframe(true);
@@ -260,9 +260,9 @@ function ScriptFormModal({ script, onSave, onCancel }) {
             </Field>
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Win %"><input type="number" name="backtest_win_rate" value={formData.backtest_win_rate} onChange={handleChange} className="form-input w-full" /></Field>
-            <Field label="PF"><input type="number" name="backtest_profit_factor" value={formData.backtest_profit_factor} onChange={handleChange} className="form-input w-full" /></Field>
-            <Field label="Max DD%"><input type="number" name="backtest_drawdown" value={formData.backtest_drawdown} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Win %"><input type="number" name="backtest_win_rate" value={formData.backtest_win_rate ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="PF"><input type="number" name="backtest_profit_factor" value={formData.backtest_profit_factor ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
+            <Field label="Max DD%"><input type="number" name="backtest_drawdown" value={formData.backtest_drawdown ?? ''} onChange={handleChange} className="form-input w-full" /></Field>
           </div>
           <label className="flex items-center gap-2 text-body-sm text-on-surface">
             <input type="checkbox" name="is_active" checked={formData.is_active} onChange={handleChange} className="w-4 h-4 accent-primary" /> Active
