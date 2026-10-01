@@ -236,6 +236,24 @@ Wealth/
         └── components/layout/BackupMenu.jsx   # backup/restore UI
 ```
 
+## Deploying (Vercel frontend + Render backend)
+
+Vercel hosts only the frontend. Without a backend every page shows
+"Error loading … HTTP 404", because nothing answers `/api`.
+
+1. **Backend on Render** — in Render choose *New → Blueprint*, select this
+   repository; `render.yaml` creates the `wealthtrack-backend` web service with
+   a 1 GB persistent disk for the database (paid *Starter* plan, required for disks).
+   When it is live, open `https://<service>.onrender.com/api/health` and check it
+   returns `{"status":"ok"}`. On first start it creates the tables and sample data.
+2. **Point the frontend at it** — in Vercel, *Project → Settings → Environment
+   Variables*, add `VITE_API_BASE_URL = https://<service>.onrender.com/api`
+   (Production and Preview).
+3. **Redeploy the frontend** in Vercel (the variable is read at build time).
+
+Any host with a persistent disk works the same way (Railway, Fly.io, a VPS):
+run `npm ci && node src/server.js` in `backend/` with `PORT` and `DB_PATH` set.
+
 ## Deploying the frontend separately (e.g. Vercel)
 
 The frontend calls the API at `/api`, which only the Vite dev server proxies to the backend.

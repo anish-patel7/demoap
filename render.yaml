@@ -1,0 +1,21 @@
+# Render Blueprint for the WealthTrack backend (Express + sql.js).
+# The database is a single file, so it lives on a persistent disk;
+# without one, all data would be lost on every redeploy/restart.
+services:
+  - type: web
+    name: wealthtrack-backend
+    runtime: node
+    rootDir: backend
+    plan: starter            # persistent disks require a paid instance
+    buildCommand: npm ci
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: /var/data/wealthtrack.db
+    disk:
+      name: wealthtrack-data
+      mountPath: /var/data
+      sizeGB: 1
