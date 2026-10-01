@@ -1,4 +1,6 @@
-const API_BASE = '/api';
+// Defaults to '/api' (proxied to the backend by Vite in dev). Set VITE_API_BASE_URL
+// (e.g. https://my-backend.example.com/api) when the backend is hosted elsewhere.
+export const API_BASE = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 async function handleResponse(response) {
   if (!response.ok) {

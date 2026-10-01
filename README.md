@@ -235,3 +235,15 @@ Wealth/
     └── src/
         └── components/layout/BackupMenu.jsx   # backup/restore UI
 ```
+
+## Deploying the frontend separately (e.g. Vercel)
+
+The frontend calls the API at `/api`, which only the Vite dev server proxies to the backend.
+When the frontend is deployed on its own (Vercel, Netlify, …), host the backend somewhere
+reachable and set this environment variable for the frontend build:
+
+```
+VITE_API_BASE_URL=https://<your-backend-host>/api
+```
+
+`frontend/vercel.json` rewrites client-side routes (e.g. `/planner`) to `index.html` so page refreshes work.

@@ -21,7 +21,7 @@ const FIELDS = [
 
 export default function WealthPlannerPage() {
   const colors = getChartColors();
-  const { data: plan } = useFetch('/wealth-plan', []);
+  const { data: plan, error: planError, refetch: refetchPlan } = useFetch('/wealth-plan', []);
   const { data: projData, refetch: refetchProj } = useFetch('/wealth-plan/projection-actual', []);
   const { data: scenarios } = useFetch('/wealth-plan/scenarios/all', []);
 
@@ -33,6 +33,17 @@ export default function WealthPlannerPage() {
     if (plan && !form) setForm({ ...plan });
   }, [plan]);
 
+  if (!form && planError) {
+    return (
+      <div className="p-gutter">
+        <div className="alert-error">
+          <p className="font-semibold">Error loading wealth plan</p>
+          <p className="text-sm mt-1">{planError}</p>
+          <button onClick={refetchPlan} className="btn-outline text-sm mt-3">Retry</button>
+        </div>
+      </div>
+    );
+  }
   if (!form) {
     return <div className="flex items-center justify-center h-96 text-on-surface-variant">Loading wealth plan...</div>;
   }
