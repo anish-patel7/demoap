@@ -11,7 +11,7 @@ export default function EquityCurveChart({ data }) {
 
   return (
     <div className="bento-card rounded-lg p-5 flex flex-col h-[400px]">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
         <div>
           <h3 className="font-headline-md text-headline-md text-on-surface">Equity Curve</h3>
           <p className="text-body-sm text-on-surface-variant">Growth of cumulative trading capital over time</p>
@@ -30,7 +30,7 @@ export default function EquityCurveChart({ data }) {
           ))}
         </div>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-h-0 min-w-0">
         {chartData.length === 0 ? (
           <div className="h-full flex items-center justify-center text-on-surface-variant text-body-sm">No equity data yet</div>
         ) : (

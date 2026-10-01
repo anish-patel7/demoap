@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const API_BASE = '/api';
 
@@ -6,8 +6,12 @@ export function useFetch(url, dependencies = []) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  // Id of the most recent request; responses from superseded requests are
+  // ignored so a slow earlier response can't overwrite newer data.
+  const requestIdRef = useRef(0);
 
   const refetch = async () => {
+    const requestId = ++requestIdRef.current;
     // Allow callers to pass either "/dashboard" or a full "/api/..." / absolute URL.
     if (url == null) {
       setLoading(false);
@@ -24,11 +28,11 @@ export function useFetch(url, dependencies = []) {
         throw new Error(`HTTP ${response.status}`);
       }
       const json = await response.json();
-      setData(json);
+      if (requestId === requestIdRef.current) setData(json);
     } catch (err) {
-      setError(err.message);
+      if (requestId === requestIdRef.current) setError(err.message);
     } finally {
-      setLoading(false);
+      if (requestId === requestIdRef.current) setLoading(false);
     }
   };
 

@@ -68,12 +68,12 @@ export default function WealthPlannerPage() {
   };
 
   return (
-    <div className="p-8 space-y-gutter">
+    <div className="p-4 md:p-8 space-y-gutter">
       <div className="grid grid-cols-12 gap-gutter">
         {/* Left: Parameter inputs */}
-        <div className="col-span-12 lg:col-span-4 space-y-gutter">
+        <div className="col-span-12 lg:col-span-4 space-y-gutter min-w-0">
           <div className="glass-card p-6 rounded-xl flex flex-col gap-5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <h3 className="font-headline-md text-headline-md text-on-surface">Projection Params</h3>
               <button
                 onClick={() => (locked ? setLocked(false) : handleSaveLock())}
@@ -116,7 +116,7 @@ export default function WealthPlannerPage() {
               <span className="material-symbols-outlined text-primary fill-icon">check_circle</span>
               <h4 className="font-mono-label uppercase text-on-surface-variant">Corpus at Age {form.projection_end_age}</h4>
             </div>
-            <p className="font-display text-display text-primary leading-tight">{formatINRCompact(finalRow?.nominalCorpus)}</p>
+            <p className="font-display text-headline-lg sm:text-display text-primary leading-tight break-words">{formatINRCompact(finalRow?.nominalCorpus)}</p>
             <p className="text-body-sm text-on-surface-variant mt-2">
               Real (inflation-adjusted): <span className="text-on-surface font-bold">{formatINRCompact(finalRow?.realCorpus)}</span>
             </p>
@@ -129,23 +129,23 @@ export default function WealthPlannerPage() {
         </div>
 
         {/* Right: chart + scenarios */}
-        <div className="col-span-12 lg:col-span-8 space-y-gutter">
+        <div className="col-span-12 lg:col-span-8 space-y-gutter min-w-0">
           {/* Projected vs Actual chart */}
           <div className="glass-card rounded-xl overflow-hidden flex flex-col h-[460px]">
-            <div className="p-6 border-b border-outline-variant flex items-center justify-between bg-surface-container-lowest/50">
+            <div className="p-4 sm:p-6 border-b border-outline-variant flex flex-wrap items-center justify-between gap-3 bg-surface-container-lowest/50">
               <div>
                 <h3 className="font-headline-md text-headline-md">Wealth Projection — Plan vs Actual</h3>
                 <p className="text-body-sm text-on-surface-variant">
                   Projected corpus (plan) overlaid with your real/live curve
                 </p>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <LegendDot color="#4edea3" label="Projected" />
                 <LegendDot color="#adc6ff" label="Actual/Live" dashed />
                 <LegendDot color="#ffb2b7" label="Real (infl-adj)" dashed />
               </div>
             </div>
-            <div className="flex-1 p-6">
+            <div className="flex-1 min-h-0 min-w-0 p-4 sm:p-6">
               <ResponsiveContainer width="100%" height="100%">
                 <ComposedChart data={rows} margin={{ top: 10, right: 10, bottom: 0, left: 0 }}>
                   <defs>
@@ -172,7 +172,7 @@ export default function WealthPlannerPage() {
           </div>
 
           {/* Scenario cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-gutter">
             {(() => {
               const cons = scenarioStats('conservative');
               const base = scenarioStats('base');
@@ -281,7 +281,7 @@ export default function WealthPlannerPage() {
 function ParamField({ field, value, locked, onChange }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <label className="font-mono-label text-[11px] text-on-surface-variant uppercase tracking-wide">{field.label}</label>
+      <label className="font-mono-label text-[11px] text-on-surface-variant uppercase tracking-wide min-w-0">{field.label}</label>
       <div className={`flex items-center gap-1 rounded-lg border px-3 py-1.5 min-w-[140px] justify-end ${
         locked ? 'bg-surface-container-lowest border-outline-variant/50' : 'bg-surface-container border-outline-variant focus-within:border-primary'
       }`}>
@@ -326,7 +326,7 @@ function ScenarioCard({ tone, label, rate, stats, basePeak, recommended }) {
         <span className={`font-mono-label text-[10px] uppercase tracking-wider ${tones.text}`}>{label}</span>
         <div className={`px-2 py-1 rounded font-mono-label text-[10px] ${tones.badge}`}>{rate}</div>
       </div>
-      <h4 className={`font-display text-headline-lg mb-1 ${tone === 'base' ? 'text-primary' : ''}`}>{formatINRCompact(peak)}</h4>
+      <h4 className={`font-display text-headline-lg mb-1 truncate ${tone === 'base' ? 'text-primary' : ''}`}>{formatINRCompact(peak)}</h4>
       <p className="text-body-sm text-on-surface-variant">Peak corpus</p>
       <div className={`mt-4 flex items-center gap-1 ${depletesYear ? 'text-error' : 'text-primary'}`}>
         <span className="material-symbols-outlined text-[16px]">{depletesYear ? 'warning' : recommended ? 'stars' : 'check_circle'}</span>

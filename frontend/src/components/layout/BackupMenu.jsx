@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { downloadBackup, restoreBackup, apiPost } from '../../api/client';
 
 export default function BackupMenu() {
@@ -102,7 +103,7 @@ export default function BackupMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-60 bg-surface-container-high border border-outline-variant rounded-lg shadow-xl py-1 z-50">
+        <div className="fixed inset-x-3 top-14 sm:absolute sm:inset-x-auto sm:top-auto sm:right-0 sm:mt-2 sm:w-60 bg-surface-container-high border border-outline-variant rounded-lg shadow-xl py-1 z-50">
           <MenuItem icon="download" label="Download Backup (.db)" onClick={handleDownload} />
           <MenuItem
             icon="restore"
@@ -128,16 +129,19 @@ export default function BackupMenu() {
         onChange={handleFileSelected}
       />
 
-      {toast && (
+      {/* Portal to <body>: the header's backdrop-filter would otherwise become
+          the containing block for this fixed-position toast. */}
+      {toast && createPortal(
         <div
-          className={`fixed bottom-6 right-6 z-[100] px-4 py-3 rounded-lg shadow-xl text-body-sm max-w-sm ${
+          className={`fixed bottom-6 right-4 left-4 sm:left-auto sm:right-6 z-[100] px-4 py-3 rounded-lg shadow-xl text-body-sm sm:max-w-sm break-words ${
             toast.type === 'success'
               ? 'bg-primary text-on-primary'
               : 'bg-red-600 text-white'
           }`}
         >
           {toast.msg}
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

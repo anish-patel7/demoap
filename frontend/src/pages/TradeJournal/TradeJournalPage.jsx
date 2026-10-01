@@ -146,7 +146,7 @@ export default function TradeJournalPage() {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => { setEditingTrade(null); setShowForm(true); }}
               className="bg-primary-container text-on-primary-container text-body-sm font-bold px-4 py-2 rounded flex items-center gap-2 hover:brightness-105 active:scale-95 transition-all"
@@ -167,7 +167,7 @@ export default function TradeJournalPage() {
             <button
               onClick={handleBulkDelete}
               disabled={selectedIds.length === 0}
-              className="text-error border border-error/30 text-body-sm px-3 py-2 rounded flex items-center gap-2 hover:bg-error/10 transition-colors ml-2 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="text-error border border-error/30 text-body-sm px-3 py-2 rounded flex items-center gap-2 hover:bg-error/10 transition-colors sm:ml-2 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span className="material-symbols-outlined text-[18px]">delete_sweep</span> Bulk Delete
               {selectedIds.length > 0 && ` (${selectedIds.length})`}
@@ -233,13 +233,13 @@ function TradeFormModal({ trade, onSave, onCancel, setups }) {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-surface-container rounded-xl max-w-2xl w-full max-h-[85vh] overflow-y-auto custom-scrollbar border border-outline-variant">
-        <div className="sticky top-0 bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
-          <h2 className="text-headline-lg font-bold text-on-surface">{trade ? 'Edit Trade' : 'New Trade'}</h2>
+        <div className="sticky top-0 z-10 bg-surface-container-high border-b border-outline-variant px-4 sm:px-6 py-4 flex justify-between items-center">
+          <h2 className="text-headline-md sm:text-headline-lg font-bold text-on-surface">{trade ? 'Edit Trade' : 'New Trade'}</h2>
           <button onClick={onCancel} className="text-on-surface-variant hover:text-on-surface">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           <TradeForm initialData={trade} onSubmit={onSave} setups={setups} onCancel={onCancel} />
         </div>
       </div>

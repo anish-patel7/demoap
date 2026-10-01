@@ -34,7 +34,7 @@ export default function MonthlyTrackerPage() {
   };
 
   return (
-    <div className="p-container-margin flex flex-col gap-6">
+    <div className="p-4 md:p-6 flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -56,7 +56,7 @@ export default function MonthlyTrackerPage() {
       </div>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
         <SummaryCard label={`INVESTED IN ${year}`} value={formatINR(grandTotal)} tone="primary" icon="trending_up" note="Net deposits this year" />
         <SummaryCard label="TOTAL DEMAT CAPITAL" value={formatINR(totalCapital)} tone="neutral" icon="account_balance" note={`${rows.length} accounts`} />
         {/* Editable planned SIP */}
@@ -128,7 +128,7 @@ export default function MonthlyTrackerPage() {
             {rows.length > 0 && (
               <tfoot>
                 <tr className="bg-surface-container border-t border-outline-variant font-bold">
-                  <td className="px-4 py-2 sticky left-0 bg-surface-container border-r border-outline-variant text-on-surface">MONTHLY TOTAL</td>
+                  <td className="px-4 py-2 sticky left-0 z-10 bg-surface-container border-r border-outline-variant text-on-surface">MONTHLY TOTAL</td>
                   {monthlyTotals.map((v, i) => (
                     <td key={i} className={`px-2 py-2 border-r border-outline-variant/30 text-center text-[11px] ${v > 0 ? 'text-primary' : 'text-on-surface-variant/40'}`}>
                       {v !== 0 ? formatINRCompact(v) : '—'}
@@ -141,7 +141,7 @@ export default function MonthlyTrackerPage() {
             )}
           </table>
         </div>
-        <div className="border-t border-outline-variant bg-surface-container-low px-4 py-2 flex items-center gap-4 text-[11px] font-mono-label">
+        <div className="border-t border-outline-variant bg-surface-container-low px-4 py-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-mono-label">
           <LegendDot color="bg-primary" label="Deposit / Invested" />
           <LegendDot color="bg-secondary" label="Withdrawal" />
           <span className="text-on-surface-variant ml-auto">Click any month cell to log an investment</span>
@@ -167,7 +167,7 @@ function SummaryCard({ label, value, tone, icon, note }) {
   return (
     <div className="bg-surface-container-low border border-outline-variant p-4 rounded-lg">
       <p className="text-mono-label text-on-surface-variant mb-1">{label}</p>
-      <p className={`text-headline-lg font-bold ${color}`}>{value}</p>
+      <p className={`text-headline-lg font-bold break-words ${color}`}>{value}</p>
       <div className="flex items-center gap-1 mt-2">
         <span className={`material-symbols-outlined text-sm ${noteColor}`}>{icon}</span>
         <span className={`text-[11px] font-mono-label ${noteColor}`}>{note}</span>
@@ -203,7 +203,7 @@ function AddInvestmentModal({ cell, year, plannedSip, onSave, onCancel }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-surface-container rounded-xl max-w-sm w-full border border-outline-variant">
+      <div className="bg-surface-container rounded-xl max-w-sm w-full max-h-[90vh] overflow-y-auto custom-scrollbar border border-outline-variant">
         <div className="bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
           <h2 className="text-headline-md font-bold text-on-surface">Log Investment</h2>
           <button onClick={onCancel} className="text-on-surface-variant hover:text-on-surface"><span className="material-symbols-outlined">close</span></button>
@@ -225,7 +225,7 @@ function AddInvestmentModal({ cell, year, plannedSip, onSave, onCancel }) {
 
           <div>
             <label className="block text-body-sm font-medium text-on-surface mb-2">Amount (₹)</label>
-            <input autoFocus type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="form-input" />
+            <input autoFocus type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="form-input w-full" />
           </div>
 
           <div className="flex gap-3 justify-end pt-2 border-t border-outline-variant">

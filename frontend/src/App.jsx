@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AccountProvider } from './context/AccountContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -14,14 +15,17 @@ import AnalyticsPage from './pages/Analytics/AnalyticsPage';
 import ReportsPage from './pages/Reports/ReportsPage';
 
 function App() {
+  // Mobile/tablet navigation drawer (the sidebar is always visible on lg+).
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
     <ThemeProvider>
       <ProfileProvider>
       <AccountProvider>
         <Router>
           <div className="flex h-screen bg-surface text-on-surface font-geist">
-            <Sidebar />
-            <PageContainer>
+            <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
+            <PageContainer onMenuClick={() => setNavOpen(true)}>
               <Routes>
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/trades" element={<TradeJournalPage />} />

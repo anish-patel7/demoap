@@ -57,8 +57,8 @@ export default function GoalProgressCard() {
   return (
     <div className="bento-card rounded-lg p-5 mb-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 border-b border-outline-variant pb-2">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4 border-b border-outline-variant pb-2">
+        <div className="flex flex-wrap items-center gap-2">
           <span className="material-symbols-outlined text-primary">flag</span>
           <h3 className="font-headline-md text-headline-md text-on-surface">
             {c.year} Growth Goal
@@ -78,9 +78,11 @@ export default function GoalProgressCard() {
 
       {!goal.configured && (
         <div className="mb-4 text-[12px] text-amber-500 flex items-center gap-2">
-          <span className="material-symbols-outlined text-[16px]">info</span>
-          Using current capital as the opening balance. Click <b>Set Goal</b> to
-          enter your December-end capital.
+          <span className="material-symbols-outlined text-[16px] flex-shrink-0">info</span>
+          <span>
+            Using current capital as the opening balance. Click <b>Set Goal</b> to
+            enter your December-end capital.
+          </span>
         </div>
       )}
 
@@ -96,8 +98,8 @@ export default function GoalProgressCard() {
             </div>
           )}
 
-          <div className="flex items-end justify-between mb-1">
-            <div>
+          <div className="flex items-end justify-between gap-3 mb-1">
+            <div className="min-w-0">
               <p className="text-[10px] font-mono-label uppercase text-on-surface-variant">
                 Current Capital
               </p>
@@ -125,7 +127,7 @@ export default function GoalProgressCard() {
               }}
             />
           </div>
-          <div className="flex justify-between mt-1.5 text-[11px] font-mono-label">
+          <div className="flex justify-between gap-2 mt-1.5 text-[11px] font-mono-label">
             <span className="text-on-surface font-bold">{pct.toFixed(1)}% achieved</span>
             <span className="text-on-surface-variant">
               {c.remaining > 0 ? `${formatINRCompact(c.remaining)} to go` : 'Target met'}
@@ -145,8 +147,11 @@ export default function GoalProgressCard() {
           <p className="text-[10px] font-mono-label uppercase text-on-surface-variant mb-1">
             Goal Achieved % — Year by Year
           </p>
-          <div className="flex-1 min-h-[180px]">
-            <YearlyChart data={chartData} />
+          <div className="relative flex-1 min-h-[180px]">
+            {/* Absolute fill gives ResponsiveContainer a definite height on every breakpoint. */}
+            <div className="absolute inset-0">
+              <YearlyChart data={chartData} />
+            </div>
           </div>
         </div>
       </div>
@@ -238,7 +243,7 @@ function GoalModal({ goal, onClose, onSaved }) {
       onMouseDown={onClose}
     >
       <div
-        className="w-full max-w-md bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl p-6"
+        className="w-full max-w-md max-h-[90vh] overflow-y-auto custom-scrollbar bg-surface-container-high border border-outline-variant rounded-xl shadow-2xl p-6"
         onMouseDown={(e) => e.stopPropagation()}
       >
         <h2 className="font-headline-md text-headline-md font-bold text-on-surface mb-1">

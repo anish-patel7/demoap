@@ -39,7 +39,7 @@ export default function StrategyManagerModal({ setups, onChanged, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-      <div className="bg-surface-container rounded-xl max-w-md w-full border border-outline-variant">
+      <div className="bg-surface-container rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto custom-scrollbar border border-outline-variant">
         <div className="bg-surface-container-high border-b border-outline-variant px-6 py-4 flex justify-between items-center">
           <h2 className="text-headline-md font-bold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">tune</span>
@@ -58,7 +58,7 @@ export default function StrategyManagerModal({ setups, onChanged, onClose }) {
               value={name}
               onChange={(e) => { setName(e.target.value); if (error) setError(''); }}
               placeholder="New strategy name (e.g. Breakout)"
-              className="form-input flex-1"
+              className="form-input flex-1 min-w-0"
             />
             <button type="submit" disabled={busy} className="btn-primary whitespace-nowrap">
               <span className="material-symbols-outlined text-[16px] align-middle">add</span> Add
@@ -73,7 +73,7 @@ export default function StrategyManagerModal({ setups, onChanged, onClose }) {
             )}
             {setups.map((s) => (
               <div key={s.id} className="flex items-center justify-between px-4 py-2.5 hover:bg-surface-variant/20">
-                <span className="text-on-surface text-body-md">{s.name}</span>
+                <span className="text-on-surface text-body-md min-w-0 break-words">{s.name}</span>
                 <button onClick={() => remove(s.id)} className="p-1 text-error hover:bg-error/10 rounded" title="Delete">
                   <span className="material-symbols-outlined text-[18px]">delete</span>
                 </button>

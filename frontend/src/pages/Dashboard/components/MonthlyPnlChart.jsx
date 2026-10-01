@@ -9,11 +9,11 @@ export default function MonthlyPnlChart({ data }) {
 
   return (
     <div className="bento-card rounded-lg p-5 flex flex-col h-[280px]">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
         <h3 className="font-headline-md text-headline-md text-on-surface">Monthly Performance</h3>
         <div className="text-body-sm font-mono-label text-on-surface-variant">FY 2023-24</div>
       </div>
-      <div className="flex-1">
+      <div className="flex-1 min-h-0 min-w-0">
         {chartData.length === 0 ? (
           <div className="h-full flex items-center justify-center text-on-surface-variant text-body-sm">No monthly data yet</div>
         ) : (
